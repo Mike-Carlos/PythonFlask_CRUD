@@ -1,0 +1,23 @@
+How to setup Python virtual environment in VSCode:
+
+	1. Open Terminal - "pip install virtualenv"
+	2. Create virtual environment - "virtualenv nameOfYourEnv"
+	3. Activate the environment - "env\Scripts\activate.bat"
+	4. Install flask - "pip install flask"
+	5. Create file - "app.py"
+	
+		from flask import Flask
+
+		app = Flask(__name__)
+
+		@app.route('/')
+		def index():
+			return "Hello World"
+
+		if __name__ == "__main__":
+			app.run(debug=True)
+			
+	6. Open Terminal Run app - "flask run"
+	7. Open Browser Enter your port number - "http://127.0.0.1:5000/"
+	
+	8. Flask SQLAlchemy Installation - "pip install FLask-SQLAlchemy"
