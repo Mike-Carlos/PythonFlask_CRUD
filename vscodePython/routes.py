@@ -1,8 +1,13 @@
-from flask import flash, redirect, render_template, request, url_for
+#routes.py
+from flask import flash, redirect, render_template, request, session, url_for
 from modelseEmployee import Data, db
 
 
 def index():
+    if 'user_id' not in session:
+        
+        return redirect(url_for('login.login'))
+    
     all_data = Data.query.all()
     return render_template('index.html', employees = all_data)
 
