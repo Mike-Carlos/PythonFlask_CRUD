@@ -7,6 +7,23 @@
     <div class="card shadow" style="width: 100%; max-width: 400px; background-color: #f8f9fa;">
         <div class="card-body">
             <h2 class="card-title text-center text-success">Create an Account</h2>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-danger text-center" role="alert" id="register-flash">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% endwith %}
+            <script>
+                setTimeout(function(){
+                  var flashMessage = document.getElementById('register-flash');
+                  if(flashMessage){
+                    flashMessage.style.display = 'none';
+                  }
+                }, 5000); // 5 Seconds
+              </script>
             <form action="{{ url_for('login.register') }}" method="POST">
                 <div class="form-group">
                     <label for="username">Username</label>

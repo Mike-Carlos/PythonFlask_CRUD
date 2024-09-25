@@ -20,3 +20,4 @@ class User(db.Model):
         new_user.set_password(password)  # Set the hashed password
         db.session.add(new_user)
         db.session.commit()
+        return new_user

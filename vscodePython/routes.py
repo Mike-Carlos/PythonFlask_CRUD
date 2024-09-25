@@ -1,6 +1,7 @@
 #routes.py
 from flask import flash, redirect, render_template, request, session, url_for
 from modelseEmployee import Data, db
+from model_user import User
 
 
 def index():
@@ -20,8 +21,16 @@ def insert():
         name = request.form['name']
         email = request.form['email']
         phone = request.form['phone']
+        username = request.form['username']  
+        password = request.form['password']  
         
-        my_data = Data(name, email, phone)
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            flash('Username already exists.')
+        else:
+            new_user = User.create_user(username, password)
+        
+        my_data = Data(name, email, phone, user_id=new_user.id)
         db.session.add(my_data)
         db.session.commit()
         

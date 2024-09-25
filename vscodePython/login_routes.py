@@ -40,7 +40,7 @@ def register():
         
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:
-            flash('Username already exists. Please choose a different one.')
+            flash('Username already exists.')
         else:
             User.create_user(username, password)
             flash('Registration successful! You can now log in.')

@@ -1,0 +1,22 @@
+<!-- flash_message.html -->
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="alert alert-success alert-dismissible fade show text-center" role="alert" id="flash-message">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endif %}
+{% endwith %}
+
+<script>
+    setTimeout(function(){
+        var flashMessage = document.getElementById('flash-message');
+        if(flashMessage){
+            flashMessage.style.display = 'none';
+        }
+    }, 3000); // 3 Seconds
+</script>
