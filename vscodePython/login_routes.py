@@ -5,6 +5,14 @@ from model_user import User
 login_bp = Blueprint('login', __name__)
 
 
+@login_bp.route('/logout', methods=['GET', 'POST'])
+def logout():
+    session.clear()
+    flash('You have been logged out!')
+    return redirect(url_for('login.login'))
+
+
+
 @login_bp.route('/login',methods=['GET','POST'])
 def login():
     if request.method == 'POST':
