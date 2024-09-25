@@ -8,8 +8,10 @@ def index():
         
         return redirect(url_for('login.login'))
     
+    current_user = session.get('username')
+    
     all_data = Data.query.all()
-    return render_template('index.html', employees = all_data)
+    return render_template('index.html', employees = all_data, current_user=current_user)
 
 
 def insert():
