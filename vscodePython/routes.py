@@ -12,7 +12,8 @@ def index():
     current_user = session.get('username')
     
     all_data = Data.query.all()
-    return render_template('index.html', employees = all_data, current_user=current_user)
+    all_users = User.query.all()
+    return render_template('index.html', employees = all_data, current_user=current_user, users=all_users)
 
 
 def insert():
@@ -46,7 +47,7 @@ def update():
         my_data.name = request.form['name']
         my_data.email = request.form['email']
         my_data.phone = request.form['phone']
-        
+         
         db.session.commit()
         
         flash("Employee Updated Successfully!")

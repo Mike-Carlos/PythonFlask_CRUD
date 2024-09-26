@@ -1,6 +1,7 @@
 #login_routes
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 from model_user import User
+from databaseConfig import db
 
 login_bp = Blueprint('login', __name__)
 
@@ -15,6 +16,9 @@ def logout():
 
 @login_bp.route('/login',methods=['GET','POST'])
 def login():
+    if 'user_id' in session:
+        return redirect(url_for('index'))
+    
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -47,3 +51,21 @@ def register():
             return redirect(url_for('login.login')) 
 
     return render_template('register.html')
+
+@login_bp.route('/change-password', methods=['GET', 'POST'])
+def change_password():
+    if request.method == 'POST':
+        current_password = request.form['current_password']
+        new_password = request.form['new_password']
+        
+        user = User.query.get(session.get('user_id'))
+        
+        if user and user.check_password(current_password):
+            user.set_password(new_password)  
+            db.session.commit()
+            flash('Password changed successfully!')
+            return redirect(url_for('index'))
+        else:
+            flash('Current password is incorrect.')
+    
+    return render_template('change_password.html') 

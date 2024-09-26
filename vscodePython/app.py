@@ -5,6 +5,7 @@ from databaseConfig import db  # Import the shared db instance
 from routes import index, insert, update, delete
 from login_routes import login_bp
 
+
 app = Flask(__name__)
 app.config.from_object(Config)
 app.secret_key = 'mysecret'
