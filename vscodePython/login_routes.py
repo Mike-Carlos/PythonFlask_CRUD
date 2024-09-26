@@ -54,6 +54,7 @@ def register():
 
 @login_bp.route('/change-password', methods=['GET', 'POST'])
 def change_password():
+    current_user = session.get('username')
     if request.method == 'POST':
         current_password = request.form['current_password']
         new_password = request.form['new_password']
@@ -68,4 +69,4 @@ def change_password():
         else:
             flash('Current password is incorrect.')
     
-    return render_template('change_password.html') 
+    return render_template('change_password.html', current_user=current_user) 

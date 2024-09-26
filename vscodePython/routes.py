@@ -57,8 +57,27 @@ def update():
 
 def delete(id):
     my_data = Data.query.get(id)
-    db.session.delete(my_data)
-    db.session.commit()
+    
+    if my_data:
+        # Get the user associated with the employee
+        user_id = my_data.user_id
         
-    flash("Employee Removed!")    
+        # Delete the associated Data entries
+        associated_data = Data.query.filter_by(user_id=user_id).all()
+        for data_entry in associated_data:
+            db.session.delete(data_entry)
+        
+        # Delete the user
+        user = User.query.get(user_id)
+        if user:
+            db.session.delete(user)
+
+        # Finally delete the specific employee record
+        db.session.delete(my_data)
+
+        db.session.commit()
+        flash("Employee and associated user removed!")
+    else:
+        flash("Employee not found.")
+    
     return redirect(url_for('index'))

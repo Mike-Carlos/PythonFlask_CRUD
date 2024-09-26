@@ -7,6 +7,7 @@ class Data(db.Model):
     email = db.Column(db.String(100))
     phone = db.Column(db.String(100))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    
 
     def __init__(self, name, email, phone, user_id):
         self.name = name
