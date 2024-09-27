@@ -2,7 +2,7 @@
 from flask import Flask
 from config import Config
 from databaseConfig import db  # Import the shared db instance
-from routes import index, insert, update, delete
+from routes import delete_multiple, index, insert, update, delete
 from login_routes import login_bp
 
 
@@ -19,6 +19,7 @@ app.add_url_rule('/', 'index', index)
 app.add_url_rule('/insert', 'insert', insert, methods=['POST'])
 app.add_url_rule('/update', 'update', update, methods=['POST'])
 app.add_url_rule('/delete/<id>/', 'delete', delete)
+app.add_url_rule('/delete_multiple/<ids>','delete_multiple',delete_multiple,methods=['GET'])
 
 
 

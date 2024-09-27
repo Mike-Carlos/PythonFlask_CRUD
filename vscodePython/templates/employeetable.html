@@ -46,12 +46,20 @@
           >
             Add New Employee
           </button>
+          <button 
+            type="button" 
+            class="btn btn-danger float-right mr-2" 
+            id="deleteSelectedBtn" 
+            onclick="deleteSelected()">
+            Delete Selected
+          </button>
         </h2>
 
         <div class="table-responsive">
           <table class="table table-hover table-dark table-bordered">
             <thead>
               <tr>
+                <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th>
                 <th>ID</th>
                 <th>Name</th>
                 <th>Email</th>
@@ -63,9 +71,10 @@
             <tbody>
               {% for row in employees %}
               <tr>
-                <td>{{row.id}}</td>
-                <td>{{row.name}}</td>
-                <td>{{row.email}}</td>
+                <td><input type="checkbox" class="employeeCheckbox" value="{{ row.id }}"></td>
+                <td>{{ row.id }}</td>
+                <td>{{ row.name }}</td>
+                <td>{{ row.email }}</td>
 
                 {% if row.user_id %}
                   {% set user = users | selectattr('id', 'equalto', row.user_id) | first %}
@@ -74,81 +83,12 @@
                   <td>N/A</td>  
                 {% endif %}
 
-                <td>{{row.phone}}</td>
-
+                <td>{{ row.phone }}</td>
                 <td>
-                  <a
-                    href="/update/{{row.id}}"
-                    class="btn btn-secondary btn-xs"
-                    data-toggle="modal"
-                    data-target="#modaledit{{row.id}}"
-                    >Edit</a
-                  >
-                  <a
-                    href="/delete/{{row.id}}"
-                    class="btn btn-danger btn-xs"
-                    onclick="return confirm('Are You Sure To Delete?')"
-                    >Delete</a
-                  >
+                  <a href="/update/{{ row.id }}" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#modaledit{{ row.id }}">Edit</a>
+                  <a href="/delete/{{ row.id }}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure To Delete?')">Delete</a>
                 </td>
               </tr>
-              
-              <div id="modaledit{{row.id}}" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h4 class="modal-title">Update Information</h4>
-                    </div>
-                    <div class="modal-body">
-                      <form action="{{url_for('update')}}" method="POST">
-                        <div class="form-group">
-                          <label>Name: </label>
-                          <input type="hidden" name="id" value="{{row.id}}" />
-                          <input
-                            type="text"
-                            class="form-control"
-                            name="name"
-                            value="{{row.name}}"
-                          />
-                        </div>
-
-                        <div class="form-group">
-                          <label>Email: </label>
-                          <input
-                            type="email"
-                            class="form-control"
-                            name="email"
-                            value="{{row.email}}"
-                          />
-                        </div>
-
-                        <div class="form-group">
-                          <label>Phone: </label>
-                          <input
-                            type="number"
-                            class="form-control"
-                            name="phone"
-                            value="{{row.phone}}"
-                          />
-                        </div>
-
-                        <div class="form-group">
-                          <button class="btn btn-primary">Submit</button>
-                        </div>
-                      </form>
-                      <div class="modal-footer">
-                        <button
-                          type="button"
-                          class="btn btn-secondary"
-                          data-dismiss="modal"
-                        >
-                          Close
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
               {% endfor %}
             </tbody>
           </table>
@@ -210,6 +150,24 @@
     document.getElementById('submitBtn').disabled = true;
     document.getElementById('loadingSpinner').style.display = 'inline-block';
   });
+
+  function toggleSelectAll(source) {
+    const checkboxes = document.querySelectorAll('.employeeCheckbox');
+    checkboxes.forEach(checkbox => checkbox.checked = source.checked);
+  }
+
+  function deleteSelected() {
+    const selectedIds = Array.from(document.querySelectorAll('.employeeCheckbox:checked'))
+                            .map(checkbox => checkbox.value);
+    
+    if (selectedIds.length > 0 && confirm('Are you sure you want to delete the selected employees?')) {
+      // Redirect to delete route with selected IDs, modify as needed
+      window.location.href = '/delete_multiple/' + selectedIds.join(',');
+    } else {
+      alert('No employees selected.');
+    }
+  }
+  
 </script>
 
 {% endblock %}

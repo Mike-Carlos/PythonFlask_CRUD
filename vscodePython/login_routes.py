@@ -27,7 +27,7 @@ def login():
         if user and user.check_password(password):
             session['user_id'] = user.id
             session['username'] = user.username
-            flash('Login Successful!')
+           
             print(session.get('user_id'))
 
             return redirect(url_for('index'))

@@ -81,3 +81,31 @@ def delete(id):
         flash("Employee not found.")
     
     return redirect(url_for('index'))
+
+
+
+def delete_multiple(ids):
+    ids_list = ids.split(',')
+    for id in ids_list:
+        my_data = Data.query.get(id)
+        if my_data:
+            # Get the user associated with the employee
+            user_id = my_data.user_id
+            
+            # Delete the associated Data entries
+            associated_data = Data.query.filter_by(user_id=user_id).all()
+            for data_entry in associated_data:
+                db.session.delete(data_entry)
+            
+            # Delete the user
+            user = User.query.get(user_id)
+            if user:
+                db.session.delete(user)
+
+            # Finally delete the specific employee record
+            db.session.delete(my_data)
+
+    db.session.commit()
+    flash("Selected employees deleted successfully!")
+    return redirect(url_for('index'))
+
