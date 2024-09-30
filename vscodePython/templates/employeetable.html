@@ -65,6 +65,7 @@
                 <th>Email</th>
                 <th>Username</th>
                 <th>Phone</th>
+                <th>Date Created</th>  <!-- Add this column -->
                 <th>Action</th>
               </tr>
             </thead>
@@ -84,6 +85,7 @@
                 {% endif %}
 
                 <td>{{ row.phone }}</td>
+                <td>{{ row.date_created.strftime('%Y-%m-%d %H:%M:%S') }}</td>  <!-- Format the date -->
                 <td>
                   <a href="/update/{{ row.id }}" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#modaledit{{ row.id }}">Edit</a>
                   <a href="/delete/{{ row.id }}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure To Delete?')">Delete</a>

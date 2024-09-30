@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %} Dashboard {% endblock %}
+
+{% block body %}
+{% include 'navbar.html' %} 
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6">
+      <canvas id="totalEmployeesChart"></canvas>
+    </div>
+    <div class="col-md-6">
+      <canvas id="phoneAreaChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Fetch the data from Flask backend
+  fetch('{{ url_for("dashboard_data") }}')
+  .then(response => response.json())
+  .then(data => {
+      console.log(data);
+
+
+      // Phone Area chart
+      const phoneAreaCtx = document.getElementById('phoneAreaChart').getContext('2d');
+      const phoneAreas = data.phone_areas.map(area => area.phone);
+      const phoneCounts = data.phone_areas.map(area => area.count);
+      
+      new Chart(phoneAreaCtx, {
+        type: 'bar',
+        data: {
+          labels: phoneAreas,
+          datasets: [{
+            label: 'Number of Employees by Phone Area',
+            data: phoneCounts,
+            backgroundColor: '#ffc107',
+          }]
+        }
+      });
+    });
+</script>
+
+{% endblock %}

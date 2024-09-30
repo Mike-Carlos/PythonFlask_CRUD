@@ -1,5 +1,5 @@
 #routes.py
-from flask import flash, redirect, render_template, request, session, url_for
+from flask import flash, redirect, render_template, request, session, url_for, jsonify
 from modelseEmployee import Data, db
 from model_user import User
 
@@ -32,7 +32,7 @@ def insert():
             new_user = User.create_user(username, password)
         
         my_data = Data(name, email, phone, user_id=new_user.id)
-        db.session.add(my_data)
+        db.session.add(my_data) 
         db.session.commit()
         
         flash("Employee Added Successfully!")
@@ -109,3 +109,27 @@ def delete_multiple(ids):
     flash("Selected employees deleted successfully!")
     return redirect(url_for('index'))
 
+
+
+def dashboard_data():
+    # Fetch data from the database
+    total_employees = Data.query.count()
+    
+    # Grouping employees by usernames, emails, or other criteria for example purposes
+    users_count = User.query.count()
+    
+    phone_areas = db.session.query(Data.phone, db.func.count(Data.phone)).group_by(Data.phone).all()    
+    data = {
+        'total_employees': total_employees,
+        'users_count': users_count,
+        'phone_areas': [dict(phone=area[0], count=area[1]) for area in phone_areas],
+    }
+    
+    return jsonify(data)
+
+def dashboard():
+    current_user = session.get('username')
+    if 'user_id' not in session:
+        return redirect(url_for('login.login'))
+
+    return render_template('dashboard.html', current_user=current_user)
